@@ -1,0 +1,3 @@
+/Users/samif0/Projects/boids/build/CMakeFiles/analyzer.dir
+/Users/samif0/Projects/boids/build/CMakeFiles/edit_cache.dir
+/Users/samif0/Projects/boids/build/CMakeFiles/rebuild_cache.dir
