@@ -13,8 +13,8 @@ export VCPKG_ROOT=/path/to/vcpkg
 ```
 2. Install dependencies using vcpkg:
 ```bash
-- vcpkg install sfml
-- vcpkg install freetype
+vcpkg install sfml
+vcpkg install freetype
 ```
 3. Build 
 ```bash
