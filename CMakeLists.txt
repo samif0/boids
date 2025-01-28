@@ -8,7 +8,9 @@ set(FREETYPE_LIBRARY "$ENV{VCPKG_ROOT}/installed/arm64-osx/lib/libfreetype.a")
 set(FREETYPE_DIR "$ENV{VCPKG_ROOT}/installed/arm64-osx/share/freetype")
 set(SFML_DIR "$ENV{VCPKG_ROOT}/installed/arm64-osx/share/sfml")
 
-add_executable(boids src/main.cpp)
+include_directories(include)
+
+add_executable(boids src/main.cpp src/boid.cpp)
 
 find_package(Freetype REQUIRED)
 target_link_libraries(boids PRIVATE Freetype::Freetype)
