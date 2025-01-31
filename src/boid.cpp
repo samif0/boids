@@ -52,7 +52,7 @@ void Boid::matchVelocity(const sf::Vector2f& averageVelocity){
 }
 void Boid::update(float deltaTime){
     this->vel += this->acc * deltaTime;
-    this->vel *= 0.99f; // Friction/damping
+    this->vel *= 0.99f;
     if (this->vel.x > maxSpeed) this->vel.x = maxSpeed;
     if (this->vel.y > maxSpeed) this->vel.y = maxSpeed;
     
@@ -65,13 +65,13 @@ void Boid::render(sf::RenderWindow& window){
     shape.setPosition(this->pos);
     window.draw(shape);
 }
-const sf::Vector2f& Boid::getPosition(){
+sf::Vector2f& Boid::getPosition(){
     return this->pos;
 }
-const sf::Vector2f& Boid::getVelocity(){
+sf::Vector2f& Boid::getVelocity(){
     return this->vel;
 }
-const sf::Vector2f& Boid::getAcceleration(){
+sf::Vector2f& Boid::getAcceleration(){
     return this->acc;
 }
 void Boid::handleCollision(float width, float height){

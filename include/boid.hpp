@@ -17,9 +17,9 @@ public:
     void matchVelocity(const sf::Vector2f& averageVelocity);
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
-    const sf::Vector2f& getPosition();
-    const sf::Vector2f& getVelocity();
-    const sf::Vector2f& getAcceleration();
+    sf::Vector2f& getPosition();
+    sf::Vector2f& getVelocity();
+    sf::Vector2f& getAcceleration();
     void handleCollision(float width, float height);
 };
 
