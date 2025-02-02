@@ -1,5 +1,7 @@
 # Boids Project Setup
 
+Currently setup for macosx
+
 ## Prerequisites
 - CMake
 - vcpkg
