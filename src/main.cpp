@@ -4,6 +4,7 @@
 #include <random>
 #include <math.h>
 #include "boid.hpp"
+#include "boid_simulation.hpp"
 
 
 std::vector<Boid> generateRandomNBoids(int nBoids, float windowWidth, float windowHeight) {
@@ -27,13 +28,31 @@ std::vector<Boid> generateRandomNBoids(int nBoids, float windowWidth, float wind
 }
 
 int main() {
-    float windowWidth = 800;
-    float windowHeight = 600;
-    float nBoids = 100;
-    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Boids");
-    window.setFramerateLimit(60);
 
-    std::vector<Boid> boids = generateRandomNBoids(nBoids, windowWidth, windowHeight);
+    boid_simulation_config * boid_sim_config = new boid_simulation_config;
+    boid_sim_config->nboids = 100;
+    boid_sim_config->window_width = 800;
+    boid_sim_config->window_height = 800;
+    boid_sim_config->window_frame_rate = 60;
+    boid_sim_config->window_title = "Boids";
+     
+    
+    boid_simulation boid_sim(boid_sim_config);
+
+   
+    //TODO: move into boid simulation because I need to have the simulation draw onto the window.
+    sf::RenderWindow window(
+        sf::VideoMode(boid_sim_config->window_width, boid_sim_config->window_height),
+        boid_sim_config->window_title);
+     
+
+    std::vector<Boid> boids = generateRandomNBoids(boid_sim_config->nboids, boid_sim_config->window_width, boid_sim_config->window_height);
+    window.setFramerateLimit(boid_sim_config->window_frame_rate);
+
+    delete boid_sim_config;
+    boid_sim_config = nullptr;
+
+    // -- replace below with simulation --
 
     sf::Clock clock;
     bool isMousePressed = false;
