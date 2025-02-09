@@ -31,7 +31,7 @@ For VS Code automated cmake builds create: .vscode/Settings.json
     "cmake.configureSettings": {
         "CMAKE_TOOLCHAIN_FILE": "${env:VCPKG_ROOT}scripts/buildsystems/vcpkg.cmake"
     },
-    "cmake.generator": "MinGW Makefiles",
+    "cmake.generator": "MinGW Makefiles", //TODO: Change based on preferred generator. i.e. Ninja ...
     "cmake.buildDirectory": "${workspaceFolder}/${workspaceFolderBasename}/build", //TODO: Update if you have don't have a parent folder for your project.
     "cmake.configureArgs": [],
     "cmake.configureEnvironment": {},
