@@ -13,6 +13,8 @@ Currently setup for macosx
 ```bash
 export VCPKG_ROOT=/path/to/vcpkg
 ```
+1a. You need to update CMakeLists.txt with the os you are running dependencies on. Replace "arm64-osx" with the os and chip type you are using.
+
 2. Install dependencies using vcpkg:
 ```bash
 vcpkg install sfml
