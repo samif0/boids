@@ -9,23 +9,38 @@ Currently setup for macosx
 
 ## Setup Steps
 
-1. Set VCPKG_ROOT environment variable:
+1. Install vcpkg and set VCPKG_ROOT environment variable:
 ```bash
 export VCPKG_ROOT=/path/to/vcpkg
 ```
-1a. You need to update CMakeLists.txt with the os you are running dependencies on. Replace "arm64-osx" with the os and chip type you are using.
 
 2. Install dependencies using vcpkg:
 ```bash
-vcpkg install sfml
-vcpkg install freetype
+vcpkg integrate install
 ```
 3. Build 
 ```bash
-cmake -B build && cmake --build build
+cmake -B build -S .
 ```
-4. (Optional) VS Code configuration 
-- Add to includePath: "${VCPKG_ROOT}/installed/arm64-osx/include"
+4. Configure VS Code
+
+For VS Code automated cmake builds create: .vscode/Settings.json
+```json
+{
+    "cmake.sourceDirectory": "C:/Users/samif/Projects/boids",
+    "cmake.configureSettings": {
+        "CMAKE_TOOLCHAIN_FILE": "${env:VCPKG_ROOT}scripts/buildsystems/vcpkg.cmake"
+    },
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.buildDirectory": "${workspaceFolder}/${workspaceFolderBasename}/build",
+    "cmake.configureArgs": [],  // Remove any extra args
+    "cmake.configureEnvironment": {},
+    "cmake.buildEnvironment": {},
+    "cmake.environment": {}
+}
+```
+
+Update/Create .vscode/c_cpp_properties.json to have proper include paths if necessary.
 
 ## Running 
 
