@@ -43,7 +43,7 @@ Update/Create .vscode/c_cpp_properties.json to have proper include paths if nece
 ./build/Debug/boids
 ```
 
-If you want to run boids outside of debug folder modift the CMakeLists.txt file as such
+If you want to run boids outside of debug folder, modify the CMakeLists.txt file as such:
 ```bash
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}) //TODO: Update the output directory to your liking
 ```
