@@ -27,13 +27,13 @@ cmake -B build -S .
 For VS Code automated cmake builds create: .vscode/Settings.json
 ```json
 {
-    "cmake.sourceDirectory": "C:/Users/samif/Projects/boids",
+    "cmake.sourceDirectory": "C:/Users/samif/Projects/boids", //TODO: Update source directory
     "cmake.configureSettings": {
         "CMAKE_TOOLCHAIN_FILE": "${env:VCPKG_ROOT}scripts/buildsystems/vcpkg.cmake"
     },
     "cmake.generator": "MinGW Makefiles",
-    "cmake.buildDirectory": "${workspaceFolder}/${workspaceFolderBasename}/build",
-    "cmake.configureArgs": [],  // Remove any extra args
+    "cmake.buildDirectory": "${workspaceFolder}/${workspaceFolderBasename}/build", //TODO: Update if you have don't have a parent folder for your project.
+    "cmake.configureArgs": [],
     "cmake.configureEnvironment": {},
     "cmake.buildEnvironment": {},
     "cmake.environment": {}
