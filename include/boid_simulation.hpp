@@ -1,9 +1,10 @@
+#ifndef BOID_SIMULATION_HPP
+#define BOID_SIMULATION_HPP
+
 #include <unordered_map>
 #include <string>
+#include "canvas.hpp"
 #include "Boid.hpp"
-
-#ifndef BOID_SIMULATION_H
-#define BOID_SIMULATION_H
 
 struct boid_simulation_config {
     int window_width;
@@ -17,8 +18,10 @@ class boid_simulation
 {
 private:
     boid_simulation_config * boid_sim_cfg_;
-    void draw();
-    std::unordered_map<unsigned int, Boid> boids;
+    std::unordered_map<unsigned int, Boid> boids_;
+    Canvas cvs_;
+    void handle_rendering(sf::RenderWindow * window);
+    void handle_physics();
 public:
     boid_simulation(boid_simulation_config * boid_sim_cfg);
     ~boid_simulation();

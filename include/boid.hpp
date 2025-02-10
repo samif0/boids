@@ -1,5 +1,5 @@
-#ifndef BOID_H
-#define BOID_H
+#ifndef BOID_HPP
+#define BOID_HPP
 
 #include <SFML/Graphics.hpp>
 

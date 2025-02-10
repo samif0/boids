@@ -39,83 +39,13 @@ int main() {
     
     boid_simulation boid_sim(boid_sim_config);
 
-   
-    //TODO: move into boid simulation because I need to have the simulation draw onto the window.
-    sf::RenderWindow window(
-        sf::VideoMode(boid_sim_config->window_width, boid_sim_config->window_height),
-        boid_sim_config->window_title);
-     
+    boid_sim.start(); 
 
-    std::vector<Boid> boids = generateRandomNBoids(boid_sim_config->nboids, boid_sim_config->window_width, boid_sim_config->window_height);
-    window.setFramerateLimit(boid_sim_config->window_frame_rate);
+    //std::vector<Boid> boids = generateRandomNBoids(boid_sim_config->nboids, boid_sim_config->window_width, boid_sim_config->window_height);
 
+    boid_sim.stop();
+    
     delete boid_sim_config;
     boid_sim_config = nullptr;
-
-    // -- replace below with simulation --
-
-    sf::Clock clock;
-    bool isMousePressed = false;
-
-    sf::Vector2f initialVelocity(100.0f,100.0f); 
-
-    while (window.isOpen()) {
-        float deltaTime = clock.restart().asSeconds();
-
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            if (event.type == sf::Event::MouseButtonPressed) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    isMousePressed = true;
-                }
-            }
-            if (event.type == sf::Event::MouseButtonReleased) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    isMousePressed = false;
-                }
-            }
-        }
-
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-        for(auto& boid : boids) {
-            sf::Vector2f avgVelocity(0, 0);
-            int neighborCount = 0;
-            
-            for(Boid other : boids) {
-                if (&other != &boid) {
-                    float dx = other.getPosition().x - boid.getPosition().x;
-                    float dy = other.getPosition().y - boid.getPosition().y;
-                    float distance = std::sqrt(dx*dx + dy*dy);
-                    
-                    if (distance < 100.0f) {
-                        avgVelocity += other.getVelocity();
-                        neighborCount++;
-                    }
-                }
-            }
-
-            if (neighborCount > 0) {
-                avgVelocity /= static_cast<float>(neighborCount);
-                boid.matchVelocity(avgVelocity);
-            }
-
-            if (isMousePressed) {
-                boid.seek(sf::Vector2f(static_cast<float>(mousePos.x), 
-                                     static_cast<float>(mousePos.y)));
-            }
-
-            boid.update(deltaTime);
-            boid.handleCollision(800.0f, 600.0f);
-        }
-
-        window.clear(sf::Color::Black);
-        for(Boid boid : boids) {
-            boid.render(window);
-        }
-        window.display();
-    }
     return 0;
 }
