@@ -3,6 +3,7 @@
   "version": "1",
   "dependencies": [
     "sfml",
-    "freetype"
+    "freetype",
+    "boost"
   ]
 }

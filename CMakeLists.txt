@@ -40,6 +40,7 @@ add_executable(boids ${SOURCES})
 
 find_package(Freetype REQUIRED)
 find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
+find_package(Boost REQUIRED COMPONENTS multi_array)
 
 target_link_libraries(boids PRIVATE
     Freetype::Freetype
@@ -48,5 +49,6 @@ target_link_libraries(boids PRIVATE
     sfml-graphics 
     sfml-window
     sfml-audio
+    Boost::multi_array
 )
 
