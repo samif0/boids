@@ -19,7 +19,7 @@ cmake -B build -S .
 cmake --build build
 ```
 
-3. Configure VS Code
+3. Configure VS Code (optional, CMakePresets.json already added to source files...)
 For VS Code automated cmake builds create: .vscode/Settings.json
 ```json
 {
