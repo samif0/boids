@@ -19,8 +19,7 @@ cmake -B build -S .
 cmake --build build
 ```
 
-3. Configure VS Code (optional, CMakePresets.json already added to source files...)
-For VS Code automated cmake builds create: .vscode/Settings.json
+3. Configure VSCode .vscode/Settings.json (optional, CMakePresets.json already)
 ```json
 {
     "cmake.sourceDirectory": "${workspaceFolder}",
@@ -36,12 +35,10 @@ For VS Code automated cmake builds create: .vscode/Settings.json
 }
 ```
 
-Update/Create .vscode/c_cpp_properties.json to have proper include paths if necessary.
-
-## Running 
+## Running the boids executable without using CMake
 
 ```bash
-./build/Debug/boids
+./build/boids
 ```
 
 If you want to run boids outside of debug folder, modify the CMakeLists.txt file as such:
