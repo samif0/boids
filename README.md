@@ -4,6 +4,7 @@
 - CMake
 - vcpkg
 - C++ compiler
+- Note: CMake Preset assumes Linux/MacOSX dev setup, update generator if using Windows.
 
 ## Setup Steps
 
