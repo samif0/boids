@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+
 class Boid {
 private:
     sf::Vector2f pos;

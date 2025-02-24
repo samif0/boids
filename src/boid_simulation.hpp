@@ -2,8 +2,9 @@
 #define BOID_SIMULATION_HPP
 
 #include <string>
-#include <unordered_map>
+#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <unordered_map>
 #include "canvas.hpp"
 #include "boid.hpp"
 

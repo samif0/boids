@@ -1,4 +1,5 @@
 #include "grid.hpp"
+#include <string>
 
 Grid
 ::Grid

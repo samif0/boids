@@ -16,6 +16,7 @@ endfunction()
 
 cmake_minimum_required(VERSION 3.15)
 
+
 # Set the toolchain file using the environment variable
 if(DEFINED ENV{VCPKG_ROOT})
     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
@@ -24,13 +25,15 @@ else()
 endif()
 
 set_target_info()
-set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 set(VCPKG_TARGET_TRIPLET "${TARGET_ARCH}-${TARGET_OS}" CACHE STRING "")
 set(VCPKG_MANIFEST_DIR ${CMAKE_SOURCE_DIR})
 
 project(boids)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 

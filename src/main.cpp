@@ -1,5 +1,7 @@
+#include <string>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <vector>
 #include <random>
 #include <math.h>
@@ -34,15 +36,14 @@ int main() {
     boid_sim_config->window_width = 800;
     boid_sim_config->window_height = 800;
     boid_sim_config->window_frame_rate = 60;
-    boid_sim_config->window_title = "Boids";
+    std::string window_title_std_string = "Boids";
+    const char * window_title_c_str = window_title_std_string.c_str();
+    boid_sim_config->window_title = sf::String(window_title_c_str, std::locale("en_US"));
      
     
     boid_simulation boid_sim(boid_sim_config);
 
     boid_sim.start(); 
-
-    //std::vector<Boid> boids = generateRandomNBoids(boid_sim_config->nboids, boid_sim_config->window_width, boid_sim_config->window_height);
-
     boid_sim.stop();
     
     delete boid_sim_config;

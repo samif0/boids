@@ -1,5 +1,5 @@
-#ifndef CEll_HPP
-#define CEll_HPP
+#ifndef CELL_HPP
+#define CELL_HPP
 
 class Cell
 {

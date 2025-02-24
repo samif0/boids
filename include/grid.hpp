@@ -3,6 +3,7 @@
 
 #include "cell.hpp"
 #include "boost/multi_array.hpp"
+#include <stdexcept>
 
 inline int const DEFAULT_GRID_SIZE = 10;
 inline int const  DEFAULT_NUM_DIMENSION = 2;
@@ -20,8 +21,7 @@ private:
 public:
     Grid();
     Grid(int grid_width, int grid_height, int grid_depth, int ndim);
-    ~Grid
-    ();
+    ~Grid();
     boost::multi_array<Cell, 2> initialize2d();
     boost::multi_array<Cell, 3> initialize3d();
 

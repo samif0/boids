@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <string>
+#include <cmath>
 #include <SFML/System.hpp>
 #include "boid.hpp"
-#include <cmath>
 
 
 Boid::Boid(float x, float y) {
