@@ -17,6 +17,7 @@ public:
     void flee(const sf::Vector2f& position, float distance);
     void matchVelocity(const sf::Vector2f& averageVelocity);
     void update(float deltaTime);
+    bool is_neighbor(const Boid& other, float distance);
     void render(sf::RenderWindow& window);
     sf::Vector2f& getPosition();
     sf::Vector2f& getVelocity();

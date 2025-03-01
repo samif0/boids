@@ -8,7 +8,7 @@
 Boid::Boid(float x, float y) {
     pos = sf::Vector2f(x, y);
     vel = sf::Vector2f(0.0f, 0.0f);
-    acc = sf::Vector2f(1.0f, 0.0f);
+    acc = sf::Vector2f(1.0f, 1.0f);
 }
 
 /*
@@ -60,9 +60,16 @@ void Boid::update(float deltaTime){
     this->pos += this->vel * deltaTime;
     this->acc = sf::Vector2f(0.0f, 0.0f);
 }
+bool Boid::is_neighbor(const Boid& other, float distance){
+    if(abs(pos.x - other.pos.x) <= distance && abs(pos.y - other.pos.y) <= distance){
+        return true;
+    }
+    return false;
+}
+
 void Boid::render(sf::RenderWindow& window){
-    sf::CircleShape shape(10.0f);
-    shape.setFillColor(sf::Color::White);
+    sf::CircleShape shape(3.0f);
+    shape.setFillColor(sf::Color::Red);
     shape.setPosition(this->pos);
     window.draw(shape);
 }

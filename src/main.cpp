@@ -13,9 +13,9 @@ int main() {
 
     boid_simulation_config * boid_sim_config = new boid_simulation_config;
     boid_sim_config->nboids = 100;
-    boid_sim_config->window_width = 1920;
-    boid_sim_config->window_height = 1080;
-    boid_sim_config->window_frame_rate = 60;
+    boid_sim_config->window_width = 800;
+    boid_sim_config->window_height = 600;
+    boid_sim_config->window_frame_rate = 144;
     std::string window_title_std_string = "Boids";
     const char * window_title_c_str = window_title_std_string.c_str();
     boid_sim_config->window_title = sf::String(window_title_c_str, std::locale("en_US"));
