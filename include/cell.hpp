@@ -3,7 +3,6 @@
 
 class Cell
 {
-private:
 public:
     Cell();
     ~Cell();

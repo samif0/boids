@@ -41,6 +41,8 @@ file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
 add_executable(boids ${SOURCES})
 
+add_compile_options(-Wall -Werror)
+
 find_package(Freetype REQUIRED)
 find_package(SFML COMPONENTS system window graphics audio CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS multi_array)
