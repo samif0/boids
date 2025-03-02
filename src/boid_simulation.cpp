@@ -124,7 +124,7 @@ void boid_simulation::handle_update_boids(sf::RenderWindow * window){
 
         boid->update(0.016f);
         boid->handle_collision(this->boid_sim_cfg_->window_width, this->boid_sim_cfg_->window_height);
-        boid->render(*window);
+        boid->render(*window, 0.016f);
     }
 }
 
@@ -201,20 +201,20 @@ void boid_simulation::start()
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> xDist(0.0f, this->boid_sim_cfg_->window_width);
     std::uniform_real_distribution<float> yDist(0.0f, this->boid_sim_cfg_->window_height);
-    std::uniform_real_distribution<float> velDist(-50.0f, 50.0f); 
+    std::uniform_real_distribution<float> velDist(-100.0f, 100.0f); 
 
     for(unsigned int i = 0; i < 500; i++) {
         float x = xDist(gen);
         float y = yDist(gen);
         Boid * boid = new Boid(x, y);
         sf::Vector2f velocity(velDist(gen), velDist(gen));
-        boid->render(window);
+        boid->render(window, 0.0016f); //TODO: calculate delta time based on target fps
         this->boids_[i] = boid;
         
     }
 
     /* TODO: create better init; init resources */
-    for(unsigned int i = 0; i < 1; i++) {
+    for(unsigned int i = 0; i < 0; i++) {
         float x = xDist(gen);
         float y = yDist(gen);
         Resource * resource = new Resource(sf::Vector2f(x, y));

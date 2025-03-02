@@ -14,6 +14,7 @@ Boid::Boid(float x, float y) {
     vel = sf::Vector2f(0.0f, 0.0f);
     acc = sf::Vector2f(0.0f, 0.0f);    
     species = rand() % 3; //TODO: Define number of species
+    current_rotation = 0.0f;
 }
 
 void Boid::apply_force(const sf::Vector2f& force) {
@@ -87,20 +88,20 @@ void Boid::align(const sf::Vector2f& otherVelocity, float weight = 0.5f) {
     apply_force(steer);
 }
 
-void Boid::update(float deltaTime) {
-    this->vel += this->acc * deltaTime;
+void Boid::update(float delta_time) {
+    this->vel += this->acc * delta_time;
     
     this->vel *= 0.995f; // Reduced damping
     
-    float velMagnitude = std::sqrt(vel.x * vel.x + vel.y * vel.y);
-    if (velMagnitude > max_speed) {
-        vel = vel / velMagnitude * max_speed;
+    float vel_magnitude = std::sqrt(vel.x * vel.x + vel.y * vel.y);
+    if (vel_magnitude > max_speed) {
+        vel = vel / vel_magnitude * max_speed;
     }
     
-    if (velMagnitude < max_speed * 0.25f) {
+    if (vel_magnitude < max_speed * 0.25f) {
         // if barely moving, add a small boost in current direction
-        if (velMagnitude > 0.01f) {
-            sf::Vector2f boost = vel / velMagnitude * (max_speed * 0.1f);
+        if (vel_magnitude > 0.01f) {
+            sf::Vector2f boost = vel / vel_magnitude * (max_speed * 0.1f);
             vel += boost;
         } else {
             vel.x += (float)(rand() % 200 - 100) / 100.0f * max_speed * 0.1f;
@@ -108,7 +109,7 @@ void Boid::update(float deltaTime) {
         }
     }
     
-    this->pos += this->vel * deltaTime; 
+    this->pos += this->vel * delta_time; 
     this->acc = sf::Vector2f(0.0f, 0.0f);
 }
 
@@ -118,7 +119,7 @@ bool Boid::is_neighbor(const Boid& other, float distance){
     return d <= distance;
 }
 
-void Boid::render(sf::RenderWindow& window){
+void Boid::render(sf::RenderWindow& window, float delta_time){
     sf::ConvexShape triangle;
     triangle.setPointCount(3);
     
@@ -129,11 +130,26 @@ void Boid::render(sf::RenderWindow& window){
     
     triangle.setOrigin(0, 0);
    
-    //TODO: impl smoother rotation
     float angle = 0;
     if (vel.x != 0 || vel.y != 0) {
         angle = std::atan2(vel.y, vel.x) * 180 / M_PI;
     }
+
+    while (angle < 0) angle += 360;
+    while (angle >= 360) angle -= 360;
+    while (current_rotation < 0) current_rotation += 360;
+    while (current_rotation >= 360) current_rotation -= 360;
+
+
+    float rotation_speed = 0.5f;
+    float angle_diff = angle - current_rotation;
+
+    
+    // handle wraparound cases
+    if (angle_diff > 180) angle_diff -= 360;
+    if (angle_diff < -180) angle_diff += 360;
+    
+    current_rotation += angle_diff * rotation_speed * delta_time;
     
     triangle.setPosition(pos);
     triangle.setRotation(angle);
