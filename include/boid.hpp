@@ -9,20 +9,25 @@ private:
     sf::Vector2f pos;
     sf::Vector2f vel;
     sf::Vector2f acc;
-    float maxSpeed = 100.0f;
+    unsigned int species;
+    float max_speed = 50.0f;
+    float max_force = 5.0f;
 
 public:
     Boid(float x, float y);
-    void seek(const sf::Vector2f& target);
-    void flee(const sf::Vector2f& position, float distance);
-    void matchVelocity(const sf::Vector2f& averageVelocity);
+    void apply_force(const sf::Vector2f& force);
+    void seek(const sf::Vector2f& target, float weight);
+    void flee(const sf::Vector2f& position, float distance, float weight);
+    void align(const sf::Vector2f& average_velocity, float weight);
     void update(float deltaTime);
     bool is_neighbor(const Boid& other, float distance);
     void render(sf::RenderWindow& window);
-    sf::Vector2f& getPosition();
-    sf::Vector2f& getVelocity();
-    sf::Vector2f& getAcceleration();
-    void handleCollision(float width, float height);
+    sf::Vector2f& get_position();
+    sf::Vector2f& get_velocity();
+    sf::Vector2f& get_acceleration();
+    float get_max_speed() { return max_speed; }
+    unsigned int get_species() { return species; }
+    void handle_collision(float width, float height);
 };
 
 #endif

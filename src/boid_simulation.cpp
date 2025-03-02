@@ -5,6 +5,32 @@
 #include <random>
 #include <unordered_map>
 
+// helpers 
+float magnitude(const sf::Vector2f& v) {
+    return std::sqrt(v.x * v.x + v.y * v.y);
+}
+
+sf::Vector2f normalize(const sf::Vector2f& v) {
+    float mag = magnitude(v);
+    if (mag > 0) {
+        return v / mag;
+    }
+    return v;
+}
+
+void limit(sf::Vector2f& v, float max) {
+    float mag = magnitude(v);
+    if (mag > max) {
+        v = v / mag * max;
+    }
+}
+
+float calculate_distance(const sf::Vector2f& v1, const sf::Vector2f& v2) {
+    sf::Vector2f diff = v1 - v2;
+    return std::sqrt(diff.x * diff.x + diff.y * diff.y);
+}
+
+
 boid_simulation::boid_simulation(boid_simulation_config *boid_sim_cfg) : 
     boid_sim_cfg_(boid_sim_cfg),
     cvs_(boid_sim_cfg->window_width, boid_sim_cfg->window_height
@@ -19,29 +45,48 @@ boid_simulation::~boid_simulation(){
 
 
 void boid_simulation::handle_update_boids(sf::RenderWindow * window){
-    sf::Vector2f avg_neighbor_velocity = sf::Vector2f(0,0);
-    float num_neighbors = 0;
     for(auto boid_pair : this->boids_) {
         Boid * boid = boid_pair.second;
-        //auto [mouse_x, mouse_y] = sf::Mouse::getPosition(*window);
-        //boid->seek(sf::Vector2f(mouse_x, mouse_y));
-        for(auto boid_pair : this->boids_) {
-            Boid * other = boid_pair.second;
+
+        sf::Vector2f separation_force(0, 0);
+        sf::Vector2f alignment_force(0, 0);
+        sf::Vector2f cohesion_force(0, 0);
+        
+        int separation_count, alignment_count, cohesion_count = 0;
+
+        sf::Vector2f average_pos(0, 0);
+        sf::Vector2f average_vel(0, 0);
+
+
+        //TODO: optimize by bucketizing regions of the environment providing 
+        // a smaller search space and introducing locality
+        for(auto boid_pair_in : this->boids_) {
+            Boid * other = boid_pair_in.second;
             if(boid != other){
-                //TODO: setup actual species based neighboring system with rewards and punishments/
-                if(boid->is_neighbor(*other, 20.0)){
-                    avg_neighbor_velocity += other->getVelocity();
-                    num_neighbors++;
-                    if((rand() % 10) + 5 <= 8) {
-                        boid->flee(other->getPosition(), 100.0);
+                if(boid->is_neighbor(*other, 20.0)) {
+                    // Separation - higher weight for same species (flock members)
+                    if(boid->get_species() == other->get_species()) {
+                        boid->flee(other->get_position(), 35.0, 6);
+                    } else {
+                        // Different species - stronger avoidance
+                        boid->flee(other->get_position(), 50.0, 7); 
+                    }
+                    
+                    // Alignment - only with same species
+                    if(boid->get_species() == other->get_species()) {
+                        boid->align(other->get_velocity(), 5);
+                    }
+                    
+                    // Cohesion - stronger with same species
+                    if(boid->get_species() == other->get_species()) {
+                        boid->seek(other->get_position(), 3);
+                    } else {
+                        // weak attraction to different species (curiosity)
+                        boid->seek(other->get_position(), 0.2f);
                     }
                 }
             }
         }
-        if(num_neighbors > 1) {
-            avg_neighbor_velocity /= num_neighbors;
-            boid->matchVelocity(avg_neighbor_velocity);
-        } 
 
         Resource * closest_resource = nullptr;
         float closest_dist = FLT_MAX;
@@ -50,12 +95,12 @@ void boid_simulation::handle_update_boids(sf::RenderWindow * window){
 
             //TODO: better measurement of distance and resource collision
             // needs to be formulated maybe based on shape size an
-            float x_diff = std::abs(resource->get_pos().x - boid->getPosition().x);
-            float y_diff = std::abs(resource->get_pos().y - boid->getPosition().y);
-            float dist = std::sqrt((x_diff * x_diff) + (y_diff * y_diff));  
+            float x_diff = std::abs(resource->get_pos().x - boid->get_position().x);
+            float y_diff = std::abs(resource->get_pos().y - boid->get_position().y);
+            float dist = std::sqrt((x_diff * x_diff) + (y_diff * y_diff));
 
 
-
+            
             if(dist <= 2){
                 resource->set_consumed(true);
                 resource->set_removed(true); 
@@ -74,11 +119,11 @@ void boid_simulation::handle_update_boids(sf::RenderWindow * window){
         //TODO: get closest resource (maybe let boid determine which resource is most feasible) with other determinants than proximity
         //TODO: add aggregate availabile variable, add depletion status as well for resources that have durability.
         if(closest_resource && !(closest_resource->is_consumed() || closest_resource->is_removed())){
-            boid->seek(closest_resource->get_pos());
+            boid->seek(closest_resource->get_pos(), 3);
         }
 
         boid->update(0.016f);
-        boid->handleCollision(this->boid_sim_cfg_->window_width, this->boid_sim_cfg_->window_height);
+        boid->handle_collision(this->boid_sim_cfg_->window_width, this->boid_sim_cfg_->window_height);
         boid->render(*window);
     }
 }
@@ -97,7 +142,6 @@ void boid_simulation::handle_draw_grid(sf::RenderWindow * window)
     int horizontal_cells = width / cell_width;
     int vertical_cells = height / cell_width;
 
-
     sf::VertexArray lines(sf::Quads);
  
     //create horizontal lines
@@ -109,7 +153,6 @@ void boid_simulation::handle_draw_grid(sf::RenderWindow * window)
         lines.append(sf::Vertex(sf::Vector2f(0, y_pos + line_thickness), grid_color));
     }
 
-    
     //create vertical lines
     for(int x = 0; x <= horizontal_cells; x++){
         float x_pos = x * cell_width;
@@ -120,7 +163,6 @@ void boid_simulation::handle_draw_grid(sf::RenderWindow * window)
     }
  
     window->draw(lines);
-
 }
 
 void boid_simulation::handle_single_frame_display(sf::RenderWindow * window)
@@ -159,9 +201,9 @@ void boid_simulation::start()
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> xDist(0.0f, this->boid_sim_cfg_->window_width);
     std::uniform_real_distribution<float> yDist(0.0f, this->boid_sim_cfg_->window_height);
-    std::uniform_real_distribution<float> velDist(-2.0f, 2.0f); 
+    std::uniform_real_distribution<float> velDist(-50.0f, 50.0f); 
 
-    for(unsigned int i = 0; i < 10; i++) {
+    for(unsigned int i = 0; i < 500; i++) {
         float x = xDist(gen);
         float y = yDist(gen);
         Boid * boid = new Boid(x, y);
@@ -172,7 +214,7 @@ void boid_simulation::start()
     }
 
     /* TODO: create better init; init resources */
-    for(unsigned int i = 0; i < 50; i++) {
+    for(unsigned int i = 0; i < 1; i++) {
         float x = xDist(gen);
         float y = yDist(gen);
         Resource * resource = new Resource(sf::Vector2f(x, y));
