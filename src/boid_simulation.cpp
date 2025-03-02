@@ -44,7 +44,7 @@ void boid_simulation::handle_update_boids(sf::RenderWindow * window){
         } 
 
         Resource * closest_resource = nullptr;
-        float closest_dist = MAXFLOAT;
+        float closest_dist = FLT_MAX;
         for(auto res_pair : this->boid_sim_state_->resources_) {
             Resource * resource = res_pair.second;
 
